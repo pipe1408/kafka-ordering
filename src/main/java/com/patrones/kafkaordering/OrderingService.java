@@ -3,18 +3,16 @@ package com.patrones.kafkaordering;
 import com.patrones.kafkaordering.entities.dto.OrderDTO;
 import com.patrones.kafkaordering.entities.dto.ProductoDTO;
 import com.patrones.kafkaordering.entities.dto.SelectedProductsDTO;
-import com.patrones.kafkaordering.entities.jpa.Cliente;
-import com.patrones.kafkaordering.entities.jpa.Producto;
-import com.patrones.kafkaordering.entities.jpa.Venta;
+import com.patrones.kafkaordering.entities.jpa.*;
 import com.patrones.kafkaordering.entities.jpa.repositories.ClienteRepository;
 import com.patrones.kafkaordering.entities.jpa.repositories.ProductoRepository;
+import com.patrones.kafkaordering.entities.jpa.repositories.VentaProductoRepository;
 import com.patrones.kafkaordering.entities.jpa.repositories.VentaRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,11 +23,14 @@ public class OrderingService {
     private final ProductoRepository productoRepository;
     private final ClienteRepository clienteRepository;
     private final VentaRepository ventaRepository;
+    private final VentaProductoRepository ventaProductoRepository;
+    private Venta venta;
 
-    public OrderingService(ProductoRepository productoRepository, ClienteRepository clienteRepository, VentaRepository ventaRepository) {
+    public OrderingService(ProductoRepository productoRepository, ClienteRepository clienteRepository, VentaRepository ventaRepository, VentaProductoRepository ventaProductoRepository) {
         this.productoRepository = productoRepository;
         this.clienteRepository = clienteRepository;
         this.ventaRepository = ventaRepository;
+        this.ventaProductoRepository = ventaProductoRepository;
     }
 
     public List<ProductoDTO> getAllProductos() {
@@ -53,7 +54,7 @@ public class OrderingService {
         return existingCount == productos.size();
     }
 
-    public HttpStatus placeOrder(@Valid OrderDTO orderDTO) {
+    public HttpStatus placeOrder(OrderDTO orderDTO) {
         if (!emailExists(orderDTO.clientEmail())) {
             return HttpStatus.UNAUTHORIZED;
         }
@@ -61,15 +62,38 @@ public class OrderingService {
             return HttpStatus.NOT_FOUND;
         }
 
+        venta = saveVenta(orderDTO);
+        saveVentaProductos(venta ,orderDTO.productsList());
+        return HttpStatus.CREATED;
+    }
+
+    private Venta saveVenta(@Valid OrderDTO orderDTO) {
         Cliente cliente = clienteRepository.findByCorreo(orderDTO.clientEmail());
-        Venta venta = new Venta();
-        venta.setEstado("CREADA");
+        venta = new Venta();
+
+        venta.setEstado("CREATED");
         venta.setIdCliente(cliente);
         venta.setDireccion(orderDTO.clientAddress());
         venta.setMetodoPago(orderDTO.paymentMethod());
-        venta.setFecha(Instant.from(LocalDateTime.now()));
+        venta.setFecha(Instant.now());
 
-        ventaRepository.save(venta);
-        return HttpStatus.CREATED;
+        return ventaRepository.save(venta);
+    }
+
+    private void saveVentaProductos(Venta currentVenta, List<SelectedProductsDTO> selectedProducts) {
+        for (SelectedProductsDTO selectedProduct : selectedProducts) {
+            VentaProducto ventaProducto = new VentaProducto();
+            VentaProductoId ventaProductoId = new VentaProductoId();
+
+            ventaProductoId.setIdCompra(currentVenta.getId());  // Assuming getId() returns the ID of Venta
+            ventaProductoId.setIdProducto(selectedProduct.productId());  // Set the product ID
+            ventaProducto.setId(ventaProductoId);
+
+            ventaProducto.setIdCompra(currentVenta);
+            ventaProducto.setIdProducto(productoRepository.findById(selectedProduct.productId()).get());
+            ventaProducto.setCantidad(selectedProduct.quantity());
+
+            ventaProductoRepository.save(ventaProducto);
+        }
     }
 }

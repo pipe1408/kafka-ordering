@@ -23,10 +23,6 @@ public class VentaProducto {
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
 
-    @NotNull
-    @Column(name = "id_venta", nullable = false)
-    private Integer idVenta;
-
     public VentaProductoId getId() {
         return id;
     }
@@ -58,13 +54,4 @@ public class VentaProducto {
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
-
-    public Integer getIdVenta() {
-        return idVenta;
-    }
-
-    public void setIdVenta(Integer idVenta) {
-        this.idVenta = idVenta;
-    }
-
 }
