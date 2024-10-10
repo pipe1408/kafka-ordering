@@ -1,5 +1,6 @@
 package com.patrones.kafkaordering;
 
+import com.patrones.kafkaordering.entities.dto.OrderCreatedDTO;
 import com.patrones.kafkaordering.entities.dto.OrderDTO;
 import com.patrones.kafkaordering.entities.dto.ProductoDTO;
 import com.patrones.kafkaordering.entities.dto.SelectedProductsDTO;
@@ -12,6 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,13 +26,15 @@ public class OrderingService {
     private final ClienteRepository clienteRepository;
     private final VentaRepository ventaRepository;
     private final VentaProductoRepository ventaProductoRepository;
+    private final KafkaProducer kafkaProducer;
     private Venta venta;
 
-    public OrderingService(ProductoRepository productoRepository, ClienteRepository clienteRepository, VentaRepository ventaRepository, VentaProductoRepository ventaProductoRepository) {
+    public OrderingService(ProductoRepository productoRepository, ClienteRepository clienteRepository, VentaRepository ventaRepository, VentaProductoRepository ventaProductoRepository, KafkaProducer kafkaProducer) {
         this.productoRepository = productoRepository;
         this.clienteRepository = clienteRepository;
         this.ventaRepository = ventaRepository;
         this.ventaProductoRepository = ventaProductoRepository;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public List<ProductoDTO> getAllProductos() {
@@ -64,6 +68,7 @@ public class OrderingService {
 
         venta = saveVenta(orderDTO);
         saveVentaProductos(venta ,orderDTO.productsList());
+        sendCreatedEvent(venta,orderDTO.productsList());
         return HttpStatus.CREATED;
     }
 
@@ -95,5 +100,26 @@ public class OrderingService {
 
             ventaProductoRepository.save(ventaProducto);
         }
+    }
+
+    private void sendCreatedEvent(Venta venta, List<SelectedProductsDTO> selectedProducts) {
+        OrderCreatedDTO orderCreatedDTO = new OrderCreatedDTO(
+                venta.getId(),
+                venta.getIdCliente().getId(),
+                selectedProducts,
+                getSelectionPrice(selectedProducts)
+        );
+        kafkaProducer.sendOrderCreated(orderCreatedDTO);
+    }
+
+    private BigDecimal getSelectionPrice(List<SelectedProductsDTO> selectedProducts) {
+        BigDecimal selectionPrice = BigDecimal.ZERO;
+
+        for (SelectedProductsDTO selectedProduct : selectedProducts) {
+            Producto producto = productoRepository.findById(selectedProduct.productId()).get();
+            selectionPrice = selectionPrice.add(producto.getValor().multiply(BigDecimal.valueOf(selectedProduct.quantity())));
+        }
+
+        return selectionPrice;
     }
 }
