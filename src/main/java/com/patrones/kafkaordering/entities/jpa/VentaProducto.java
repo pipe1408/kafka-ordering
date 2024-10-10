@@ -1,6 +1,7 @@
 package com.patrones.kafkaordering.entities.jpa;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "venta_producto")
@@ -18,8 +19,13 @@ public class VentaProducto {
     @JoinColumn(name = "id_producto", nullable = false)
     private Producto idProducto;
 
+    @NotNull
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
+
+    @NotNull
+    @Column(name = "id_venta", nullable = false)
+    private Integer idVenta;
 
     public VentaProductoId getId() {
         return id;
@@ -51,6 +57,14 @@ public class VentaProducto {
 
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public Integer getIdVenta() {
+        return idVenta;
+    }
+
+    public void setIdVenta(Integer idVenta) {
+        this.idVenta = idVenta;
     }
 
 }

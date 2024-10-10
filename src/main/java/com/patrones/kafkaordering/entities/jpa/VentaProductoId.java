@@ -2,16 +2,21 @@ package com.patrones.kafkaordering.entities.jpa;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.Hibernate;
 
+import java.io.Serial;
 import java.util.Objects;
 
 @Embeddable
 public class VentaProductoId implements java.io.Serializable {
-    private static final long serialVersionUID = -3346858305957386754L;
+    @Serial
+    private static final long serialVersionUID = -5970230490908096249L;
+    @NotNull
     @Column(name = "id_compra", nullable = false)
     private Integer idCompra;
 
+    @NotNull
     @Column(name = "id_producto", nullable = false)
     private Integer idProducto;
 

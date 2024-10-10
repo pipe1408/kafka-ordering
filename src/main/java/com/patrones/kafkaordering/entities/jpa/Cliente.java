@@ -1,9 +1,8 @@
 package com.patrones.kafkaordering.entities.jpa;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 
@@ -11,15 +10,21 @@ import java.math.BigDecimal;
 @Table(name = "cliente")
 public class Cliente {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
+    @Size(max = 100)
+    @NotNull
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
+    @Size(max = 100)
+    @NotNull
     @Column(name = "correo", nullable = false, length = 100)
     private String correo;
 
+    @NotNull
     @Column(name = "dinero_disponible", nullable = false, precision = 10, scale = 2)
     private BigDecimal dineroDisponible;
 
