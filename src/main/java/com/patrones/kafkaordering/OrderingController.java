@@ -1,6 +1,6 @@
 package com.patrones.kafkaordering;
 
-import com.patrones.kafkaordering.jpa.repositories.ProductoRepository;
+import com.patrones.kafkaordering.entities.dto.ProductoDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +11,8 @@ import java.util.List;
 @RestController
 public class OrderingController {
     private final OrderingService orderingService;
-    ProductoRepository productoRepository;
 
-    public OrderingController(ProductoRepository productoRepository, OrderingService orderingService) {
-        this.productoRepository = productoRepository;
+    public OrderingController(OrderingService orderingService) {
         this.orderingService = orderingService;
     }
 

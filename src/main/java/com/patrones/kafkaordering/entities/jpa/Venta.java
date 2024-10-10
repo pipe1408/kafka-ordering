@@ -1,4 +1,4 @@
-package com.patrones.kafkaordering.jpa;
+package com.patrones.kafkaordering.entities.jpa;
 
 import jakarta.persistence.*;
 

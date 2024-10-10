@@ -1,8 +1,7 @@
-package com.patrones.kafkaordering.jpa;
+package com.patrones.kafkaordering.entities.jpa;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
 import org.hibernate.Hibernate;
 
 import java.util.Objects;

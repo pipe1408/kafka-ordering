@@ -1,4 +1,4 @@
-package com.patrones.kafkaordering;
+package com.patrones.kafkaordering.entities.dto;
 
 import java.math.BigDecimal;
 

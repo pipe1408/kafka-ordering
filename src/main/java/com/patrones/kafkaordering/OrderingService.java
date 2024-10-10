@@ -1,7 +1,8 @@
 package com.patrones.kafkaordering;
 
-import com.patrones.kafkaordering.jpa.Producto;
-import com.patrones.kafkaordering.jpa.repositories.ProductoRepository;
+import com.patrones.kafkaordering.entities.dto.ProductoDTO;
+import com.patrones.kafkaordering.entities.jpa.Producto;
+import com.patrones.kafkaordering.entities.jpa.repositories.ProductoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,8 @@ public class OrderingService {
 
     public List<ProductoDTO> getAllProductos() {
         List<Producto> productos = productoRepository.findAll();
-        return productos.stream()
+        return productos
+                .stream()
                 .map(producto -> new ProductoDTO(producto.getId(), producto.getNombre(), producto.getValor()))
                 .collect(Collectors.toList());
     }
