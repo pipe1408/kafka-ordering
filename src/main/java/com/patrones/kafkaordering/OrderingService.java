@@ -85,8 +85,8 @@ public class OrderingService {
             VentaProducto ventaProducto = new VentaProducto();
             VentaProductoId ventaProductoId = new VentaProductoId();
 
-            ventaProductoId.setIdCompra(currentVenta.getId());  // Assuming getId() returns the ID of Venta
-            ventaProductoId.setIdProducto(selectedProduct.productId());  // Set the product ID
+            ventaProductoId.setIdCompra(currentVenta.getId());
+            ventaProductoId.setIdProducto(selectedProduct.productId());
             ventaProducto.setId(ventaProductoId);
 
             ventaProducto.setIdCompra(currentVenta);
