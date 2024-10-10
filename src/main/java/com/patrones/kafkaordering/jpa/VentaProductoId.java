@@ -2,24 +2,35 @@ package com.patrones.kafkaordering.jpa;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Entity;
 import org.hibernate.Hibernate;
 
-import java.io.Serial;
 import java.util.Objects;
 
-@Setter
-@Getter
 @Embeddable
 public class VentaProductoId implements java.io.Serializable {
-    @Serial
-    private static final long serialVersionUID = -8201930032385009860L;
+    private static final long serialVersionUID = -3346858305957386754L;
     @Column(name = "id_compra", nullable = false)
     private Integer idCompra;
 
     @Column(name = "id_producto", nullable = false)
     private Integer idProducto;
+
+    public Integer getIdCompra() {
+        return idCompra;
+    }
+
+    public void setIdCompra(Integer idCompra) {
+        this.idCompra = idCompra;
+    }
+
+    public Integer getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Integer idProducto) {
+        this.idProducto = idProducto;
+    }
 
     @Override
     public boolean equals(Object o) {

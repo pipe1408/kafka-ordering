@@ -4,15 +4,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Setter
-@Getter
 @Entity
-@Table(name = "cliente", schema = "parcial2")
+@Table(name = "cliente")
 public class Cliente {
     @Id
     @Column(name = "id", nullable = false)
@@ -26,5 +22,37 @@ public class Cliente {
 
     @Column(name = "dinero_disponible", nullable = false, precision = 10, scale = 2)
     private BigDecimal dineroDisponible;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public BigDecimal getDineroDisponible() {
+        return dineroDisponible;
+    }
+
+    public void setDineroDisponible(BigDecimal dineroDisponible) {
+        this.dineroDisponible = dineroDisponible;
+    }
 
 }

@@ -1,13 +1,9 @@
 package com.patrones.kafkaordering.jpa;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
-@Setter
-@Getter
 @Entity
-@Table(name = "venta_producto", schema = "parcial2")
+@Table(name = "venta_producto")
 public class VentaProducto {
     @EmbeddedId
     private VentaProductoId id;
@@ -24,5 +20,37 @@ public class VentaProducto {
 
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
+
+    public VentaProductoId getId() {
+        return id;
+    }
+
+    public void setId(VentaProductoId id) {
+        this.id = id;
+    }
+
+    public Venta getIdCompra() {
+        return idCompra;
+    }
+
+    public void setIdCompra(Venta idCompra) {
+        this.idCompra = idCompra;
+    }
+
+    public Producto getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Producto idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
 
 }
