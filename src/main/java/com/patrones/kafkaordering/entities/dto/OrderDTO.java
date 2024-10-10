@@ -13,5 +13,13 @@ public record OrderDTO(
 
         @NotNull(message = "Products list cannot be null")
         @NotEmpty(message = "Products list cannot be empty")
-        List<SelectedProductsDTO> productsList) {
+        List<SelectedProductsDTO> productsList,
+
+        @NotNull(message = "Address cannot be null")
+        @NotEmpty(message = "Address cannot be empty")
+        String clientAddress,
+
+        @NotNull(message = "Payment method cannot be null")
+        @NotEmpty(message = "Payment method cannot be empty")
+        String paymentMethod) {
 }
