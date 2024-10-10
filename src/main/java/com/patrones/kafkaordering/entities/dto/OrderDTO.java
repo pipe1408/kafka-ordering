@@ -1,0 +1,17 @@
+package com.patrones.kafkaordering.entities.dto;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
+
+public record OrderDTO(
+        @Email(message = "Invalid email format")
+        @NotEmpty(message = "Email cannot be empty")
+        String clientEmail,
+
+        @NotNull(message = "Products list cannot be null")
+        @NotEmpty(message = "Products list cannot be empty")
+        List<SelectedProductsDTO> productsList) {
+}
