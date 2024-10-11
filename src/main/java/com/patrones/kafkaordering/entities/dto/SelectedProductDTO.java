@@ -1,6 +1,6 @@
 package com.patrones.kafkaordering.entities.dto;
 
-public record SelectedProductsDTO(
+public record SelectedProductDTO(
         Integer productId,
         Integer quantity) {
     public Integer getProductId() {

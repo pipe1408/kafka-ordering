@@ -6,6 +6,6 @@ import java.util.List;
 public record OrderCreatedDTO(
         Integer orderId,
         Integer customerId,
-        List<SelectedProductsDTO> productList,
+        List<SelectedProductDTO> productList,
         BigDecimal totalAmount) {
 }

@@ -13,7 +13,7 @@ public record OrderDTO(
 
         @NotNull(message = "Products list cannot be null")
         @NotEmpty(message = "Products list cannot be empty")
-        List<SelectedProductsDTO> productsList,
+        List<SelectedProductDTO> productsList,
 
         @NotNull(message = "Address cannot be null")
         @NotEmpty(message = "Address cannot be empty")
