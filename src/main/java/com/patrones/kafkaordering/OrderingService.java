@@ -26,15 +26,15 @@ public class OrderingService {
     private final ClienteRepository clienteRepository;
     private final VentaRepository ventaRepository;
     private final VentaProductoRepository ventaProductoRepository;
-    private final KafkaProducer kafkaProducer;
+    private final KafkaClient kafkaClient;
     private Venta venta;
 
-    public OrderingService(ProductoRepository productoRepository, ClienteRepository clienteRepository, VentaRepository ventaRepository, VentaProductoRepository ventaProductoRepository, KafkaProducer kafkaProducer) {
+    public OrderingService(ProductoRepository productoRepository, ClienteRepository clienteRepository, VentaRepository ventaRepository, VentaProductoRepository ventaProductoRepository, KafkaClient kafkaClient) {
         this.productoRepository = productoRepository;
         this.clienteRepository = clienteRepository;
         this.ventaRepository = ventaRepository;
         this.ventaProductoRepository = ventaProductoRepository;
-        this.kafkaProducer = kafkaProducer;
+        this.kafkaClient = kafkaClient;
     }
 
     public List<ProductoDTO> getAllProductos() {
@@ -109,7 +109,7 @@ public class OrderingService {
                 selectedProducts,
                 getSelectionPrice(selectedProducts)
         );
-        kafkaProducer.sendOrderCreated(orderCreatedDTO);
+        kafkaClient.sendOrderCreated(orderCreatedDTO);
     }
 
     private BigDecimal getSelectionPrice(List<SelectedProductsDTO> selectedProducts) {
